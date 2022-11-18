@@ -30,7 +30,29 @@ on:
       BUILD_ENVIRONMENT_URL:
         description: 'Build environment url.'
         type: string
-        required: true      
+        required: true
+      DEV_ENVIRONMENT_URL:
+        description: 'Development environment url.'
+        type: string
+        required: true
+        default: 'https://devdiscoverpp.crm4.dynamics.com/'
+      INTEGRATION_ENVIRONMENT_URL:
+        description: 'Integration environment url.'
+        type: string
+        required: true
+        default: 'https://integrationdiscoverpp.crm4.dynamics.com/'
+      TEST_ENVIRONMENT_URL:
+        description: 'Test environment url.'
+        type: string
+        required: true
+        default: 'https://testdiscoverpp.crm4.dynamics.com/'
+      PRODUCTION_ENVIRONMENT_URL:
+        description: 'Production environment url.'
+        type: string
+        required: true
+        default: 'https://proddiscoverpp.crm4.dynamics.com/'
+
+
       CLIENT_ID: 
         description: 'The client id'
         type: string
@@ -40,14 +62,15 @@ on:
         type: string
         required: true
     secrets:
-      envSecret:
+      ENV_SECRET:
         description: 'The secret value for authentication using SPN'
         required: true
 env:
 #edit your values here
-  ENVIRONMENT_URL: 'https://org81cb9f70.crm6.dynamics.com'
-  CLIENT_ID: '291adacd-5854-4cd4-be80-558cfe4e4dbf'
-  TENANT_ID: '3501e278-e6f5-4e0b-a897-abfa9b1c4136'
+  ENVIRONMENT_URL: 'https://devdiscoverpp.crm4.dynamics.com/'
+
+  CLIENT_ID: 'f07dd58f-c560-4a8a-b4d3-d99a1731831c'
+  TENANT_ID: 'ec2c19e4-a62f-4428-9565-1f19483aca4c'
 
 jobs:
   export-from-dev:
@@ -65,9 +88,9 @@ jobs:
       uses: microsoft/powerplatform-actions/who-am-i@0.4.0
       with:
         environment-url: ${{inputs.BUILD_ENVIRONMENT_URL}}
-        app-id: ${{inputs.CLIENT_ID}}
-        client-secret: ${{ secrets.envSecret }}
-        tenant-id: ${{inputs.TENANT_ID}}
+        app-id: ${{secrets.CLIENT_ID}}
+        client-secret: ${{ secrets.ENV_SECRET }}
+        tenant-id: ${{secrets.TENANT_ID}}
 
 
     - name: export-solution action
@@ -75,8 +98,8 @@ jobs:
       with:
         environment-url: ${{inputs.BUILD_ENVIRONMENT_URL}}
         app-id: ${{inputs.CLIENT_ID}}
-        client-secret: ${{ secrets.envSecret }}
-        tenant-id: ${{inputs.TENANT_ID}}
+        client-secret: ${{ secrets.ENV_SECRET }}
+        tenant-id: ${{secrets.TENANT_ID}}
         solution-name: ${{ inputs.solution_name }}
         solution-output-file: ${{ inputs.solution_exported_folder}}/${{ inputs.solution_name }}.zip
 
